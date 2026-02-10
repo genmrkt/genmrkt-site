@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Course Demo — GENMRKT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       COURSE PLAYER DEMO
+       Design system aligned with GENMRKT brand:
+       - Dark palette with warm/cool accent gradients
+       - Outfit for display text, Satoshi for body
+       - Interactive quiz components with drag & drop
+    ============================================ */
+
+    /* ============================================
+       VARIABLES & RESET
+    ============================================ */
+    :root {
+      /* Dark palette — matches GENMRKT design system */
+      --color-bg: #141422;
+      --color-surface: #1d1d32;
+      --color-surface-2: #252540;
+      --color-surface-3: #2e2e52;
+      --color-border: #2a2a44;
+      --color-text: #f8f6ff;
+      --color-text-dim: #dddaf0;
+      --color-text-muted: #bbb9d0;
+
+      /* Accent colors — warm and cool gradients */
+      --color-accent-warm: #ff4d4d;
+      --color-accent-cool: #5b3cff;
+      --gradient-warm: linear-gradient(135deg, #ff4d4d, #ff8c42);
+      --gradient-cool: linear-gradient(135deg, #5b3cff, #3c9dff);
+      --gradient-mix: linear-gradient(135deg, #ff4d4d, #5b3cff);
+      --glow-warm: rgba(255, 77, 77, 0.15);
+      --glow-cool: rgba(91, 60, 255, 0.15);
+      --glow-warm-strong: rgba(255, 77, 77, 0.25);
+
+      /* Quiz feedback colors */
+      --color-correct: #32ff8b;
+      --color-correct-bg: rgba(50, 255, 139, 0.1);
+      --color-correct-border: rgba(50, 255, 139, 0.3);
+      --color-incorrect: #ff5a5a;
+      --color-incorrect-bg: rgba(255, 90, 90, 0.1);
+      --color-incorrect-border: rgba(255, 90, 90, 0.3);
+
+      /* Typography — Outfit for display, Satoshi for body */
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+
+      /* Animation easing curves */
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ============================================
+       COURSE PLAYER — OUTER SHELL
+    ============================================ */
+    .course-player {
+      width: 100%;
+      max-width: 1100px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 40px 100px rgba(0,0,0,0.5),
+        0 0 80px var(--glow-warm);
+    }
+
+    /* ============================================
+       HEADER BAR
+    ============================================ */
+    .course-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-surface-2);
+    }
+
+    .course-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .course-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--glow-warm);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-accent-warm);
+    }
+
+    .course-meta h1 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .course-meta span {
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
+    }
+
+    .course-header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-text-dim);
+    }
+
+    .slide-counter .current {
+      color: var(--color-accent-warm);
+      font-size: 1rem;
+    }
+
+    /* ============================================
+       PROGRESS BAR
+    ============================================ */
+    .progress-bar-track {
+      height: 3px;
+      background: var(--color-surface-3);
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-warm);
+      transition: width 0.5s var(--ease-out);
+      border-radius: 0 3px 3px 0;
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -3px;
+      width: 9px;
+      height: 9px;
+      background: var(--color-accent-warm);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--glow-warm-strong);
+    }
+
+    /* ============================================
+       MAIN LAYOUT: SIDEBAR + CONTENT
+    ============================================ */
+    .course-body {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 560px;
+    }
+
+    /* ---- Sidebar ---- */
+    .course-sidebar {
+      background: var(--color-surface-2);
+      border-right: 1px solid var(--color-border);
+      padding: 28px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .sidebar-item:hover {
+      background: var(--color-surface-3);
+    }
+
+    .sidebar-item.active {
+      background: var(--glow-warm);
+      border-color: var(--color-accent-warm);
+    }
+
+    .sidebar-item.completed .sidebar-dot {
+      background: var(--color-correct);
+      border-color: var(--color-correct);
+    }
+
+    .sidebar-dot {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--color-text-muted);
+      background: transparent;
+      transition: all 0.3s;
+    }
+
+    .sidebar-item.active .sidebar-dot {
+      border-color: var(--color-accent-warm);
+      background: var(--color-accent-warm);
+      box-shadow: 0 0 8px var(--glow-warm-strong);
+    }
+
+    .sidebar-title {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-text-dim);
+      line-height: 1.35;
+    }
+
+    .sidebar-item.active .sidebar-title {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .sidebar-item.completed .sidebar-title {
+      color: var(--color-text-dim);
+    }
+
+    .sidebar-badge {
+      font-size: 0.6rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .sidebar-badge.quiz {
+      background: var(--glow-cool);
+      color: var(--color-accent-cool);
+    }
+
+    /* ---- Content Area ---- */
+    .course-content {
+      padding: 48px 52px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* ============================================
+       SLIDE TRANSITIONS
+    ============================================ */
+    .slide {
+      display: none;
+      animation: slideIn 0.45s var(--ease-out) forwards;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       SLIDE CONTENT STYLES
+    ============================================ */
+    .slide-eyebrow {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+      color: var(--color-accent-warm);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-eyebrow::before {
+      content: '';
+      width: 16px;
+      height: 2px;
+      background: var(--gradient-warm);
+    }
+
+    .slide h2 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .slide h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .slide p {
+      color: var(--color-text-dim);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .slide-image {
+      width: 100%;
+      height: 220px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+      font-size: 4rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--glow-warm) 0%, var(--glow-cool) 100%);
+      pointer-events: none;
+    }
+
+    .learning-objectives {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 20px 0;
+    }
+
+    .learning-objectives h3 {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .learning-objectives ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .learning-objectives li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--color-text-dim);
+      line-height: 1.5;
+    }
+
+    .learning-objectives li::before {
+      content: '→';
+      color: var(--color-accent-warm);
+      font-weight: 700;
+      margin-top: 1px;
+      min-width: 16px;
+    }
+
+    .key-point {
+      background: var(--glow-warm);
+      border-left: 3px solid var(--color-accent-warm);
+      padding: 18px 22px;
+      border-radius: 0 12px 12px 0;
+      margin: 20px 0;
+    }
+
+    .key-point p {
+      color: var(--color-text);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    /* ============================================
+       QUIZ STYLES
+    ============================================ */
+    .quiz-container {
+      margin-top: 8px;
+    }
+
+    .quiz-question-label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: var(--color-accent-warm);
+      margin-bottom: 8px;
+    }
+
+    /* -- Multiple Choice & Multi-Select -- */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s var(--ease-spring);
+      user-select: none;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--color-text-muted);
+      background: var(--color-surface-3);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--color-accent-warm);
+      background: var(--glow-warm);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--color-correct-border) !important;
+      background: var(--color-correct-bg) !important;
+    }
+
+    .quiz-option.incorrect {
+      border-color: var(--color-incorrect-border) !important;
+      background: var(--color-incorrect-bg) !important;
+    }
+
+    .quiz-option .indicator {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      font-size: 0.7rem;
+    }
+
+    .quiz-option[data-type="multi"] .indicator {
+      border-radius: 6px;
+    }
+
+    .quiz-option.selected .indicator {
+      border-color: var(--color-accent-warm);
+      background: var(--color-accent-warm);
+      color: var(--color-bg);
+    }
+
+    .quiz-option.correct .indicator {
+      border-color: var(--color-correct);
+      background: var(--color-correct);
+      color: var(--color-bg);
+    }
+
+    .quiz-option.incorrect .indicator {
+      border-color: var(--color-incorrect);
+      background: var(--color-incorrect);
+      color: #fff;
+    }
+
+    .quiz-option .option-text {
+      font-size: 0.9rem;
+      color: var(--color-text-dim);
+      line-height: 1.5;
+    }
+
+    .quiz-option.selected .option-text {
+      color: var(--color-text);
+    }
+
+    /* -- Sequencing / Drag-to-Order -- */
+    .sequence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .sequence-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      cursor: grab;
+      transition: border-color 0.25s, background 0.25s, transform 0.15s, box-shadow 0.25s;
+      user-select: none;
+    }
+
+    .sequence-item:active {
+      cursor: grabbing;
+    }
+
+    .sequence-item.dragging {
+      opacity: 0.5;
+      border-color: var(--color-accent-warm);
+      transform: scale(0.97);
+    }
+
+    .sequence-item.drag-over {
+      border-color: var(--color-accent-warm);
+      background: var(--glow-warm);
+      box-shadow: 0 0 20px var(--glow-warm-strong);
+    }
+
+    .sequence-item.correct {
+      border-color: var(--color-correct-border);
+      background: var(--color-correct-bg);
+    }
+
+    .sequence-item.incorrect {
+      border-color: var(--color-incorrect-border);
+      background: var(--color-incorrect-bg);
+    }
+
+    .sequence-number {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      background: var(--color-surface-3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-text-dim);
+    }
+
+    .sequence-item.correct .sequence-number {
+      background: var(--color-correct);
+      color: var(--color-bg);
+    }
+
+    .sequence-item.incorrect .sequence-number {
+      background: var(--color-incorrect);
+      color: #fff;
+    }
+
+    .drag-handle {
+      color: var(--color-text-muted);
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .drag-handle span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .sequence-text {
+      font-size: 0.9rem;
+      color: var(--color-text-dim);
+    }
+
+    /* -- Hint Box -- */
+    .quiz-hint {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .quiz-hint-icon {
+      color: var(--color-accent-cool);
+      min-width: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint p {
+      font-size: 0.85rem;
+      color: var(--color-text-dim);
+      margin: 0;
+      font-style: italic;
+    }
+
+    /* -- Feedback -- */
+    .quiz-feedback {
+      padding: 18px 22px;
+      border-radius: 16px;
+      margin-top: 16px;
+      display: none;
+      animation: feedbackIn 0.35s var(--ease-spring) forwards;
+    }
+
+    .quiz-feedback.show {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .quiz-feedback.success {
+      background: var(--color-correct-bg);
+      border: 1px solid var(--color-correct-border);
+    }
+
+    .quiz-feedback.error {
+      background: var(--color-incorrect-bg);
+      border: 1px solid var(--color-incorrect-border);
+    }
+
+    .quiz-feedback .feedback-icon {
+      font-size: 1.2rem;
+      min-width: 24px;
+    }
+
+    .quiz-feedback p {
+      font-size: 0.9rem;
+      margin: 0;
+      color: var(--color-text);
+    }
+
+    @keyframes feedbackIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       COMPLETION SLIDE
+    ============================================ */
+    .completion-card {
+      text-align: center;
+      padding: 32px 0;
+    }
+
+    .completion-badge {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 28px;
+      background: var(--glow-warm);
+      border: 2px solid var(--color-accent-warm);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      animation: badgePop 0.6s var(--ease-spring) forwards;
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .completion-score {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      margin: 16px 0 8px;
+    }
+
+    .completion-score .big {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 800;
+      background: var(--gradient-warm);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .completion-score .label {
+      font-size: 1rem;
+      color: var(--color-text-dim);
+      font-weight: 500;
+    }
+
+    .completion-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 28px 0;
+    }
+
+    .completion-stat {
+      text-align: center;
+    }
+
+    .completion-stat .num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+
+    .completion-stat .desc {
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
+      margin-top: 2px;
+    }
+
+    /* ============================================
+       NAVIGATION BUTTONS
+    ============================================ */
+    .slide-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 100px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.25s var(--ease-spring), box-shadow 0.3s, opacity 0.3s, background 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.04);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-accent {
+      background: var(--gradient-warm);
+      color: #fff;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      box-shadow: 0 0 30px var(--glow-warm-strong);
+    }
+
+    .btn-ghost {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-dim);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--color-text-muted);
+      color: var(--color-text);
+    }
+
+    .btn-check {
+      background: var(--gradient-warm);
+      color: #fff;
+    }
+
+    .btn svg {
+      transition: transform 0.25s var(--ease-spring);
+    }
+
+    .btn-accent:hover svg { transform: translateX(3px); }
+    .btn-ghost:hover svg { transform: translateX(-3px); }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 800px) {
+      body { padding: 12px; }
+
+      .course-body {
+        grid-template-columns: 1fr;
+      }
+
+      .course-sidebar {
+        display: none;
+      }
+
+      .course-content {
+        padding: 28px 24px;
+      }
+
+      .slide h2 {
+        font-size: 1.35rem;
+      }
+
+      .completion-stats {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="course-player">
+
+  <!-- ============================================
+       HEADER
+  ============================================ -->
+  <div class="course-header">
+    <div class="course-header-left">
+      <div class="course-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="course-meta">
+        <h1>How to Tie Your Shoes</h1>
+        <span>Demo Course • 10 slides</span>
+      </div>
+    </div>
+    <div class="course-header-right">
+      <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">10</span></div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressBar" style="width: 10%"></div>
+  </div>
+
+  <!-- ============================================
+       BODY: SIDEBAR + SLIDES
+  ============================================ -->
+  <div class="course-body">
+
+    <!-- Sidebar -->
+    <div class="course-sidebar" id="sidebar">
+      <div class="sidebar-label">Course Outline</div>
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Content Area -->
+    <div class="course-content" id="slideContainer">
+      <!-- Slides populated by JS -->
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================
+// COURSE DATA — Edit this to create new courses!
+// ============================================
+const courseData = {
+  title: "How to Tie Your Shoes",
+  slides: [
+    // ---- SLIDE 0: Welcome ----
+    {
+      title: "Welcome",
+      type: "content",
+      eyebrow: "Introduction",
+      heading: "Welcome to Shoe Tying 101!",
+      body: `Welcome to this quick interactive guide on how to tie your shoes. In the next few minutes, you'll learn the proper technique that will ensure your shoes stay securely tied all day long.`,
+      image: "👟",
+      extraHtml: `<div class="key-point"><p>This demo shows how GENMRKT builds interactive e-learning experiences — with quizzes, drag-to-order, and real-time feedback.</p></div>`
+    },
+    // ---- SLIDE 1: Objectives ----
+    {
+      title: "Learning Objectives",
+      type: "content",
+      eyebrow: "Overview",
+      heading: "What You'll Learn",
+      body: "Before we begin, let's look at what this module covers.",
+      objectives: [
+        "The correct starting position for your laces",
+        "How to create a strong base knot",
+        "The proper technique for making a secure bow",
+        "Common mistakes to avoid"
+      ]
+    },
+    // ---- SLIDE 2: Step 1 ----
+    {
+      title: "Step 1: Starting Position",
+      type: "content",
+      eyebrow: "Step 1 of 4",
+      heading: "Starting Position",
+      body: "Start by holding one lace in each hand. Grasp them about 6–8 inches from the ends, making sure they're even. This equal length is essential for creating a balanced, secure knot that won't come undone.",
+      image: "🪢",
+      extraHtml: `<div class="key-point"><p><strong>Key insight:</strong> Even lace lengths are the #1 factor in a knot that stays tied. Think of it like a balanced scale.</p></div>`
+    },
+    // ---- SLIDE 3: Quiz — Multiple Choice ----
+    {
+      title: "Check: Starting Position",
+      type: "quiz-single",
+      eyebrow: "Knowledge Check",
+      heading: "Starting Position",
+      question: "What's most important when starting to tie your shoes?",
+      options: [
+        { text: "Having laces of equal length, about 6–8 inches from the ends", correct: true },
+        { text: "Making sure the right lace is longer than the left", correct: false },
+        { text: "Holding the laces as close to the shoe as possible", correct: false },
+        { text: "Wrapping the laces around your fingers first", correct: false }
+      ],
+      hint: "Think about balance — just like a scale needs equal weights, your shoelace knot needs equal sides.",
+      successMsg: "Correct! Equal length laces create a balanced, long-lasting knot.",
+      failMsg: "Not quite. Equal lace lengths (about 6–8 inches) are the key to a balanced knot."
+    },
+    // ---- SLIDE 4: Step 2 ----
+    {
+      title: "Step 2: The Cross",
+      type: "content",
+      eyebrow: "Step 2 of 4",
+      heading: "Creating the Cross",
+      body: `Cross the right lace over the left lace, forming an "X". This is your starting position for the base knot. Notice how the right lace crosses cleanly over the left — this positioning is crucial for the next step.`,
+      image: "✖️",
+      extraHtml: `<div class="key-point"><p><strong>Pro tip:</strong> Consistency matters. Always crossing right-over-left (or always left-over-right) builds muscle memory faster.</p></div>`
+    },
+    // ---- SLIDE 5: Quiz — Sequencing ----
+    {
+      title: "Check: Base Knot Order",
+      type: "quiz-sequence",
+      eyebrow: "Knowledge Check",
+      heading: "Creating the Foundation",
+      question: "Drag these steps into the correct order to create the base knot:",
+      items: [
+        { id: "a", text: "Cross the right lace over the left", order: 1 },
+        { id: "b", text: "Push the right lace under and through the loop", order: 2 },
+        { id: "c", text: "Pull both ends gently to create a snug knot", order: 3 }
+      ],
+      hint: "Remember: Over, under, and through — like threading a needle.",
+      successMsg: "Perfect sequence! Over → under → pull snug.",
+      failMsg: "Not the right order. Think: cross over, push under & through, then pull snug."
+    },
+    // ---- SLIDE 6: Step 3 ----
+    {
+      title: "Step 3: Under & Through",
+      type: "content",
+      eyebrow: "Step 3 of 4",
+      heading: "Under and Through",
+      body: "Take the right lace (now on the left side) and push it under and through the loop you've created. Pull both ends gently to tighten, creating your base knot. It should be snug but not tight — you'll need flexibility for the bow.",
+      image: "🔄"
+    },
+    // ---- SLIDE 7: Quiz — Multi-Select ----
+    {
+      title: "Check: Loop Technique",
+      type: "quiz-multi",
+      eyebrow: "Knowledge Check",
+      heading: "Creating the Bow",
+      question: "Select ALL correct statements about making the loops:",
+      options: [
+        { text: "Make the first loop with one lace and hold it steady", correct: true },
+        { text: "Wrap the other lace around the base of the first loop", correct: true },
+        { text: "Push the lace through the new hole to form the second loop", correct: true },
+        { text: "Pull the loops as hard as possible to make them tight", correct: false },
+        { text: "Make one loop much bigger than the other", correct: false }
+      ],
+      hint: "The key is gentle, balanced tension — not tight pulling.",
+      successMsg: "Excellent! Gentle, balanced technique is the key to a great bow.",
+      failMsg: "Not all correct. Remember: hold steady, wrap around, push through — with gentle tension. No tight pulling or uneven loops."
+    },
+    // ---- SLIDE 8: Step 4 ----
+    {
+      title: "Step 4: Perfect Bow",
+      type: "content",
+      eyebrow: "Step 4 of 4",
+      heading: "Creating the Perfect Bow",
+      body: "Create your loops and adjust them to perfection. Both sides should be approximately equal — about 2 inches each. This symmetry is key to a long-lasting bow. The loops should be even, and the knot should feel secure but not tight.",
+      image: "🎀",
+      extraHtml: `<div class="key-point"><p><strong>Final check:</strong> A perfect bow is symmetrical, secure without being tight, and both loops should be roughly the same size.</p></div>`
+    },
+    // ---- SLIDE 9: Completion ----
+    {
+      title: "Course Complete!",
+      type: "completion",
+      heading: "Congratulations!",
+      body: "You've mastered the art of shoe tying. Practice makes perfect — with these techniques you'll create secure, comfortable knots every time."
+    }
+  ]
+};
+
+// ============================================
+// COURSE ENGINE
+// ============================================
+let currentSlide = 0;
+let quizResults = {}; // slideIndex -> { answered: bool, correct: bool }
+let quizSelections = {}; // slideIndex -> selected indices
+let sequenceOrders = {}; // slideIndex -> current order of item ids
+
+const slideContainer = document.getElementById('slideContainer');
+const sidebar = document.getElementById('sidebar');
+const progressBar = document.getElementById('progressBar');
+const currentSlideEl = document.getElementById('currentSlide');
+const totalSlidesEl = document.getElementById('totalSlides');
+
+totalSlidesEl.textContent = courseData.slides.length;
+
+// ---- Build Sidebar ----
+function buildSidebar() {
+  const items = courseData.slides.map((slide, i) => {
+    const isQuiz = slide.type.startsWith('quiz');
+    const badge = isQuiz ? `<span class="sidebar-badge quiz">Quiz</span>` : '';
+    return `
+      <div class="sidebar-item ${i === currentSlide ? 'active' : ''} ${quizResults[i]?.answered ? 'completed' : ''}"
+           data-index="${i}" onclick="goToSlide(${i})">
+        <div class="sidebar-dot"></div>
+        <span class="sidebar-title">${slide.title}</span>
+        ${badge}
+      </div>`;
+  }).join('');
+  sidebar.innerHTML = `<div class="sidebar-label">Course Outline</div>` + items;
+}
+
+// ---- Render Slide ----
+function renderSlide() {
+  const slide = courseData.slides[currentSlide];
+  let html = `<div class="slide active">`;
+
+  if (slide.type === 'content') {
+    html += renderContentSlide(slide);
+  } else if (slide.type === 'quiz-single') {
+    html += renderSingleQuiz(slide, currentSlide);
+  } else if (slide.type === 'quiz-multi') {
+    html += renderMultiQuiz(slide, currentSlide);
+  } else if (slide.type === 'quiz-sequence') {
+    html += renderSequenceQuiz(slide, currentSlide);
+  } else if (slide.type === 'completion') {
+    html += renderCompletion(slide);
+  }
+
+  // Navigation
+  html += renderNav(slide);
+  html += `</div>`;
+
+  slideContainer.innerHTML = html;
+  updateUI();
+
+  // Reattach drag events for sequence quizzes
+  if (slide.type === 'quiz-sequence') initDragAndDrop(currentSlide);
+}
+
+function renderContentSlide(slide) {
+  let h = '';
+  if (slide.eyebrow) h += `<div class="slide-eyebrow">${slide.eyebrow}</div>`;
+  h += `<h2>${slide.heading}</h2>`;
+  h += `<p>${slide.body}</p>`;
+  if (slide.image) h += `<div class="slide-image">${slide.image}</div>`;
+  if (slide.objectives) {
+    h += `<div class="learning-objectives"><h3>📋 Learning Objectives</h3><ul>`;
+    slide.objectives.forEach(o => h += `<li>${o}</li>`);
+    h += `</ul></div>`;
+  }
+  if (slide.extraHtml) h += slide.extraHtml;
+  return h;
+}
+
+function renderSingleQuiz(slide, idx) {
+  const answered = quizResults[idx]?.answered;
+  const selected = quizSelections[idx] ?? null;
+
+  let h = '';
+  if (slide.eyebrow) h += `<div class="slide-eyebrow">${slide.eyebrow}</div>`;
+  h += `<div class="quiz-question-label">Question</div>`;
+  h += `<h2>${slide.question}</h2>`;
+  h += `<div class="quiz-options">`;
+
+  slide.options.forEach((opt, i) => {
+    let cls = 'quiz-option';
+    if (selected === i) cls += ' selected';
+    if (answered && opt.correct) cls += ' correct';
+    if (answered && selected === i && !opt.correct) cls += ' incorrect';
+
+    const checkmark = answered && opt.correct ? '✓' : (answered && selected === i && !opt.correct ? '✗' : '');
+    const clickable = answered ? '' : `onclick="selectSingle(${idx}, ${i})"`;
+
+    h += `<div class="${cls}" ${clickable}>
+      <div class="indicator">${checkmark}</div>
+      <span class="option-text">${opt.text}</span>
+    </div>`;
+  });
+
+  h += `</div>`;
+  if (slide.hint && !answered) h += renderHint(slide.hint);
+  if (answered) h += renderFeedback(quizResults[idx].correct, slide);
+  return h;
+}
+
+function renderMultiQuiz(slide, idx) {
+  const answered = quizResults[idx]?.answered;
+  const selected = quizSelections[idx] || [];
+
+  let h = '';
+  if (slide.eyebrow) h += `<div class="slide-eyebrow">${slide.eyebrow}</div>`;
+  h += `<div class="quiz-question-label">Select All That Apply</div>`;
+  h += `<h2>${slide.question}</h2>`;
+  h += `<div class="quiz-options">`;
+
+  slide.options.forEach((opt, i) => {
+    let cls = 'quiz-option';
+    const isSel = selected.includes(i);
+    if (isSel) cls += ' selected';
+    if (answered && opt.correct) cls += ' correct';
+    if (answered && isSel && !opt.correct) cls += ' incorrect';
+
+    const checkmark = answered && opt.correct ? '✓' : (answered && isSel && !opt.correct ? '✗' : (isSel ? '✓' : ''));
+    const clickable = answered ? '' : `onclick="toggleMulti(${idx}, ${i})"`;
+
+    h += `<div class="${cls}" data-type="multi" ${clickable}>
+      <div class="indicator">${checkmark}</div>
+      <span class="option-text">${opt.text}</span>
+    </div>`;
+  });
+
+  h += `</div>`;
+  if (slide.hint && !answered) h += renderHint(slide.hint);
+  if (answered) h += renderFeedback(quizResults[idx].correct, slide);
+  return h;
+}
+
+function renderSequenceQuiz(slide, idx) {
+  const answered = quizResults[idx]?.answered;
+
+  // Initialize order if not set
+  if (!sequenceOrders[idx]) {
+    const ids = slide.items.map(item => item.id);
+    // Shuffle
+    for (let i = ids.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [ids[i], ids[j]] = [ids[j], ids[i]];
+    }
+    sequenceOrders[idx] = ids;
+  }
+
+  const order = sequenceOrders[idx];
+  const itemMap = {};
+  slide.items.forEach(item => itemMap[item.id] = item);
+
+  let h = '';
+  if (slide.eyebrow) h += `<div class="slide-eyebrow">${slide.eyebrow}</div>`;
+  h += `<div class="quiz-question-label">Drag to Reorder</div>`;
+  h += `<h2>${slide.question}</h2>`;
+  h += `<div class="sequence-list" id="sequenceList">`;
+
+  order.forEach((id, i) => {
+    const item = itemMap[id];
+    const correctPos = item.order - 1;
+    let cls = 'sequence-item';
+    if (answered) cls += correctPos === i ? ' correct' : ' incorrect';
+
+    h += `<div class="${cls}" draggable="${!answered}" data-id="${id}">
+      <div class="sequence-number">${i + 1}</div>
+      <span class="sequence-text">${item.text}</span>
+      ${!answered ? `<div class="drag-handle"><span></span><span></span><span></span></div>` : ''}
+    </div>`;
+  });
+
+  h += `</div>`;
+  if (slide.hint && !answered) h += renderHint(slide.hint);
+  if (answered) h += renderFeedback(quizResults[idx].correct, slide);
+  return h;
+}
+
+function renderCompletion(slide) {
+  const totalQuizzes = Object.keys(quizResults).length;
+  const correctCount = Object.values(quizResults).filter(r => r.correct).length;
+  const pct = totalQuizzes > 0 ? Math.round((correctCount / totalQuizzes) * 100) : 100;
+
+  let h = `<div class="completion-card">`;
+  h += `<div class="completion-badge">🏆</div>`;
+  h += `<h2>${slide.heading}</h2>`;
+  h += `<p>${slide.body}</p>`;
+  h += `<div class="completion-score"><span class="big">${pct}%</span><span class="label">score</span></div>`;
+  h += `<div class="completion-stats">
+    <div class="completion-stat"><div class="num">${courseData.slides.length}</div><div class="desc">Slides Completed</div></div>
+    <div class="completion-stat"><div class="num">${correctCount}/${totalQuizzes}</div><div class="desc">Quizzes Correct</div></div>
+  </div>`;
+  h += `</div>`;
+  return h;
+}
+
+function renderHint(hint) {
+  return `<div class="quiz-hint">
+    <div class="quiz-hint-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    </div>
+    <p>${hint}</p>
+  </div>`;
+}
+
+function renderFeedback(correct, slide) {
+  const cls = correct ? 'success' : 'error';
+  const icon = correct ? '🎉' : '💡';
+  const msg = correct ? slide.successMsg : slide.failMsg;
+  return `<div class="quiz-feedback show ${cls}">
+    <div class="feedback-icon">${icon}</div>
+    <p>${msg}</p>
+  </div>`;
+}
+
+function renderNav(slide) {
+  const isFirst = currentSlide === 0;
+  const isLast = currentSlide === courseData.slides.length - 1;
+  const isQuiz = slide.type.startsWith('quiz');
+  const answered = quizResults[currentSlide]?.answered;
+
+  let h = `<div class="slide-nav">`;
+
+  // Back
+  if (isFirst) {
+    h += `<div></div>`;
+  } else {
+    h += `<button class="btn btn-ghost" onclick="prevSlide()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Back
+    </button>`;
+  }
+
+  // Right side
+  if (isQuiz && !answered) {
+    h += `<button class="btn btn-check btn-accent" onclick="checkAnswer(${currentSlide})">Check Answer</button>`;
+  } else if (isLast) {
+    h += `<button class="btn btn-accent" onclick="goToSlide(0)">
+      Start Over
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>`;
+  } else {
+    h += `<button class="btn btn-accent" onclick="nextSlide()">
+      Continue
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>`;
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+// ---- UI Update ----
+function updateUI() {
+  const total = courseData.slides.length;
+  currentSlideEl.textContent = currentSlide + 1;
+  progressBar.style.width = `${((currentSlide + 1) / total) * 100}%`;
+  buildSidebar();
+}
+
+// ---- Navigation ----
+function nextSlide() {
+  if (currentSlide < courseData.slides.length - 1) {
+    currentSlide++;
+    renderSlide();
+    slideContainer.scrollTop = 0;
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    renderSlide();
+    slideContainer.scrollTop = 0;
+  }
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  // Reset quiz data if starting over from completion
+  if (index === 0) {
+    // Only reset if they hit "Start Over"
+    const slide = courseData.slides[currentSlide];
+    if (Object.keys(quizResults).length > 0) {
+      quizResults = {};
+      quizSelections = {};
+      sequenceOrders = {};
+    }
+  }
+  renderSlide();
+  slideContainer.scrollTop = 0;
+}
+
+// ---- Quiz Interactions ----
+function selectSingle(slideIdx, optIdx) {
+  quizSelections[slideIdx] = optIdx;
+  renderSlide();
+}
+
+function toggleMulti(slideIdx, optIdx) {
+  if (!quizSelections[slideIdx]) quizSelections[slideIdx] = [];
+  const arr = quizSelections[slideIdx];
+  const pos = arr.indexOf(optIdx);
+  if (pos === -1) arr.push(optIdx);
+  else arr.splice(pos, 1);
+  renderSlide();
+}
+
+function checkAnswer(slideIdx) {
+  const slide = courseData.slides[slideIdx];
+
+  if (slide.type === 'quiz-single') {
+    const sel = quizSelections[slideIdx];
+    if (sel == null) return; // nothing selected
+    const correct = slide.options[sel].correct;
+    quizResults[slideIdx] = { answered: true, correct };
+  }
+
+  else if (slide.type === 'quiz-multi') {
+    const sel = quizSelections[slideIdx] || [];
+    if (sel.length === 0) return;
+    const correctIndices = slide.options.map((o, i) => o.correct ? i : -1).filter(i => i >= 0);
+    const correct = correctIndices.length === sel.length && correctIndices.every(i => sel.includes(i));
+    quizResults[slideIdx] = { answered: true, correct };
+  }
+
+  else if (slide.type === 'quiz-sequence') {
+    const order = sequenceOrders[slideIdx];
+    const itemMap = {};
+    slide.items.forEach(item => itemMap[item.id] = item);
+    const correct = order.every((id, i) => itemMap[id].order === i + 1);
+    quizResults[slideIdx] = { answered: true, correct };
+  }
+
+  renderSlide();
+}
+
+// ---- Drag & Drop for Sequence ----
+function initDragAndDrop(slideIdx) {
+  const list = document.getElementById('sequenceList');
+  if (!list) return;
+
+  let draggedId = null;
+
+  list.querySelectorAll('.sequence-item').forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+      draggedId = item.dataset.id;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      list.querySelectorAll('.sequence-item').forEach(el => el.classList.remove('drag-over'));
+    });
+
+    item.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      item.classList.add('drag-over');
+    });
+
+    item.addEventListener('dragleave', () => {
+      item.classList.remove('drag-over');
+    });
+
+    item.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const targetId = item.dataset.id;
+      if (draggedId && draggedId !== targetId) {
+        const order = sequenceOrders[slideIdx];
+        const fromIdx = order.indexOf(draggedId);
+        const toIdx = order.indexOf(targetId);
+        order.splice(fromIdx, 1);
+        order.splice(toIdx, 0, draggedId);
+        renderSlide();
+      }
+    });
+  });
+
+  // Touch support for mobile
+  let touchDragId = null;
+  let touchClone = null;
+
+  list.querySelectorAll('.sequence-item').forEach(item => {
+    item.addEventListener('touchstart', (e) => {
+      touchDragId = item.dataset.id;
+      item.classList.add('dragging');
+    }, { passive: true });
+
+    item.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      list.querySelectorAll('.sequence-item').forEach(el => el.classList.remove('drag-over'));
+      if (target && target.closest('.sequence-item')) {
+        target.closest('.sequence-item').classList.add('drag-over');
+      }
+    }, { passive: false });
+
+    item.addEventListener('touchend', (e) => {
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const targetItem = target?.closest('.sequence-item');
+
+      if (targetItem && touchDragId && touchDragId !== targetItem.dataset.id) {
+        const order = sequenceOrders[slideIdx];
+        const fromIdx = order.indexOf(touchDragId);
+        const toIdx = order.indexOf(targetItem.dataset.id);
+        order.splice(fromIdx, 1);
+        order.splice(toIdx, 0, touchDragId);
+      }
+
+      touchDragId = null;
+      list.querySelectorAll('.sequence-item').forEach(el => {
+        el.classList.remove('dragging');
+        el.classList.remove('drag-over');
+      });
+      renderSlide();
+    });
+  });
+}
+
+// ---- Initialize ----
+renderSlide();
+</script>
+
+</body>
+</html>
