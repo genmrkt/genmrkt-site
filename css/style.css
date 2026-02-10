@@ -1050,6 +1050,271 @@ footer {
 }
 
 /* ============================================
+   SERVICE HERO
+   Simplified hero for service pages
+============================================ */
+.service-hero {
+  min-height: 80vh;
+  padding: 160px 0 100px;
+}
+
+.service-hero .hero-content {
+  max-width: 800px;
+}
+
+/* ============================================
+   PRICING CARDS
+   Three-column pricing grid with featured card
+============================================ */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.pricing-card {
+  background: var(--l-surface);
+  border: 2px solid var(--l-border);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s, border-color 0.4s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Featured/recommended card */
+.pricing-card-featured {
+  border-color: var(--accent-1);
+  box-shadow: 0 8px 32px rgba(255, 77, 77, 0.12);
+  transform: scale(1.05);
+}
+
+.pricing-card-featured:hover {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 24px 64px rgba(255, 77, 77, 0.18);
+}
+
+/* Recommended badge */
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 20px;
+  border-radius: 100px;
+}
+
+.pricing-header {
+  margin-bottom: 32px;
+}
+
+.pricing-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--l-text);
+  margin-bottom: 8px;
+}
+
+.pricing-desc {
+  font-size: 0.9rem;
+  color: var(--l-text-dim);
+  line-height: 1.6;
+}
+
+.pricing-features {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.pricing-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--l-text);
+  line-height: 1.6;
+}
+
+.pricing-feature svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-1);
+}
+
+/* Pricing buttons */
+.btn-pricing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border-radius: 100px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid var(--l-border);
+  color: var(--l-text);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  width: 100%;
+}
+
+.btn-pricing:hover {
+  border-color: var(--accent-1);
+  color: var(--accent-1);
+  background: var(--glow-warm);
+}
+
+.btn-pricing-featured {
+  background: var(--gradient);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-pricing-featured:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(255, 77, 77, 0.3);
+  background: var(--gradient);
+  border-color: transparent;
+}
+
+/* ============================================
+   STEPS ROW
+   Three-column step cards for process explanation
+============================================ */
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+
+.step-card {
+  background: var(--d-surface);
+  border: 1px solid var(--d-border);
+  border-radius: 20px;
+  padding: 40px;
+  transition: transform 0.3s var(--ease-out), border-color 0.3s;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+.step-number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+
+.step-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--d-text);
+  margin-bottom: 12px;
+}
+
+.step-card p {
+  font-size: 0.95rem;
+  color: var(--d-text-dim);
+  line-height: 1.7;
+}
+
+/* ============================================
+   TESTIMONIALS GRID
+   Client testimonials in 2x2 grid
+============================================ */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.testimonial-card {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.testimonial-quote {
+  font-family: var(--font-display);
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 0.8;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.15;
+  position: absolute;
+  top: 20px;
+  left: 32px;
+}
+
+.testimonial-text {
+  font-size: 1.05rem;
+  color: var(--l-text);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.testimonial-author strong {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--l-text);
+}
+
+.testimonial-author span {
+  font-size: 0.85rem;
+  color: var(--l-text-dim);
+}
+
+/* ============================================
    RESPONSIVE BREAKPOINTS
    Mobile and tablet layout adjustments
 ============================================ */
@@ -1075,6 +1340,29 @@ footer {
 
   .footer-top {
     grid-template-columns: 1fr 1fr;
+  }
+
+  /* Pricing and testimonials adjust to 2 columns */
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .pricing-card-featured {
+    transform: scale(1);
+  }
+
+  .pricing-card-featured:hover {
+    transform: scale(1) translateY(-4px);
+  }
+
+  .steps-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1124,5 +1412,42 @@ footer {
     flex-direction: column;
     gap: 12px;
     text-align: center;
+  }
+
+  /* Service hero adjustments */
+  .service-hero {
+    min-height: 60vh;
+    padding: 120px 0 80px;
+  }
+
+  /* Pricing cards stack */
+  .pricing-grid {
+    gap: 16px;
+  }
+
+  .pricing-card {
+    padding: 32px;
+  }
+
+  /* Steps stack */
+  .steps-row {
+    gap: 20px;
+  }
+
+  .step-card {
+    padding: 32px;
+  }
+
+  /* Testimonials stack */
+  .testimonials-grid {
+    gap: 20px;
+  }
+
+  .testimonial-card {
+    padding: 32px;
+  }
+
+  .testimonial-quote {
+    font-size: 4rem;
   }
 }
