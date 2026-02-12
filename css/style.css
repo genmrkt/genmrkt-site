@@ -1372,7 +1372,7 @@ footer {
 
 .demo-iframe {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 750px;
   border: 1px solid var(--d-border);
   border-radius: 20px;
   overflow: hidden;
