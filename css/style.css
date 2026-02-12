@@ -1385,14 +1385,6 @@ footer {
   border: none;
 }
 
-.demo-note {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--d-text-dim);
-  margin-top: 20px;
-  font-style: italic;
-}
-
 /* ============================================
    ID PROCESS GRID
    4-column process cards for instructional design
@@ -1875,10 +1867,5 @@ footer {
 
   .id-process-card {
     padding: 28px;
-  }
-
-  .demo-note {
-    font-size: 0.8rem;
-    padding: 0 20px;
   }
 }
