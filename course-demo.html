@@ -279,9 +279,12 @@
 
     /* ---- Content Area ---- */
     .course-content {
-      padding: 48px 52px;
+      padding: 48px 52px 24px;
       overflow-y: auto;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 560px;
     }
 
     /* ============================================
@@ -293,7 +296,10 @@
     }
 
     .slide.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
     }
 
     @keyframes slideIn {
@@ -767,9 +773,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 36px;
+      margin-top: auto;
       padding-top: 24px;
       border-top: 1px solid var(--color-border);
+      flex-shrink: 0;
     }
 
     .btn {
