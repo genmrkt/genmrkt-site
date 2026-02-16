@@ -1750,6 +1750,26 @@ footer {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
+
+  /* Marketing Automation responsive */
+  .automation-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .platforms-grid-major {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .platforms-grid-tools {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .checklist-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Mobile: 768px and below */
@@ -1864,4 +1884,233 @@ footer {
   .id-process-card {
     padding: 28px;
   }
+
+  /* Marketing Automation mobile adjustments */
+  .automation-services-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .automation-service-card {
+    padding: 28px;
+  }
+
+  .platforms-grid-major {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .platforms-grid-tools {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .checklist-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   MARKETING AUTOMATION SERVICES GRID
+   3-column grid for automation service cards
+============================================ */
+.automation-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.automation-service-card {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 20px;
+  padding: 32px;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s, border-color 0.4s;
+}
+
+.automation-service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-1);
+}
+
+.automation-service-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  line-height: 1;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+}
+
+.automation-service-icon.icon-warm {
+  background: var(--glow-warm);
+}
+
+.automation-service-icon.icon-cool {
+  background: var(--glow-cool);
+}
+
+.automation-service-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--l-text);
+  margin-bottom: 16px;
+}
+
+.automation-service-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.automation-service-list li {
+  font-size: 0.9rem;
+  color: var(--l-text-dim);
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+
+.automation-service-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-1);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+/* ============================================
+   PLATFORMS SECTION
+   Platform pills and tool badges
+============================================ */
+.platforms-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.platforms-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--d-text-dim);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.platforms-grid-major {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.platform-pill {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-border);
+  border-radius: 100px;
+  padding: 18px 28px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--d-text);
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease-out);
+}
+
+.platform-pill:hover {
+  border-color: var(--accent-1);
+  background: var(--glow-warm);
+  transform: translateY(-4px);
+}
+
+.platforms-grid-tools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.platform-pill-small {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-border);
+  border-radius: 100px;
+  padding: 12px 20px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--d-text-dim);
+  transition: border-color 0.3s, background 0.3s, color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.platform-pill-small:hover {
+  border-color: var(--accent-2);
+  background: var(--glow-cool);
+  color: var(--d-text);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   PRICING BEST FOR
+   "Best for" label in pricing cards
+============================================ */
+.pricing-best-for {
+  font-size: 0.85rem;
+  color: var(--l-text-dim);
+  font-weight: 500;
+  margin-bottom: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--l-border);
+}
+
+/* ============================================
+   CHECKLIST CONTAINER
+   Who We Work With checklist styling
+============================================ */
+.checklist-container {
+  max-width: 700px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 16px;
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s, border-color 0.3s;
+}
+
+.checklist-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  border-color: var(--accent-1);
+}
+
+.checklist-item svg {
+  flex-shrink: 0;
+  color: var(--accent-1);
+  margin-top: 2px;
+}
+
+.checklist-item span {
+  font-size: 1rem;
+  color: var(--l-text);
+  font-weight: 500;
+  line-height: 1.5;
 }
