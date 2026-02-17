@@ -1208,6 +1208,12 @@ footer {
   margin-top: 56px;
 }
 
+/* Four-column variant for 4-step processes */
+.steps-row-4 {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
 .step-card {
   background: var(--d-surface);
   border: 1px solid var(--d-border);
@@ -1713,7 +1719,8 @@ footer {
   }
 
   /* Pricing and testimonials adjust to 2 columns */
-  .pricing-grid {
+  .pricing-grid,
+  .pricing-grid-dark {
     grid-template-columns: 1fr;
     gap: 20px;
   }
@@ -1726,7 +1733,8 @@ footer {
     transform: scale(1) translateY(-4px);
   }
 
-  .steps-row {
+  .steps-row,
+  .steps-row-4 {
     grid-template-columns: 1fr;
     gap: 24px;
   }
@@ -1769,6 +1777,18 @@ footer {
 
   .checklist-container {
     grid-template-columns: 1fr;
+  }
+
+  /* Lead Gen Framework responsive */
+  .leadgen-framework-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* Lead Gen Types responsive */
+  .leadgen-types-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
@@ -1827,7 +1847,8 @@ footer {
   }
 
   /* Pricing cards stack */
-  .pricing-grid {
+  .pricing-grid,
+  .pricing-grid-dark {
     gap: 16px;
   }
 
@@ -1836,7 +1857,8 @@ footer {
   }
 
   /* Steps stack */
-  .steps-row {
+  .steps-row,
+  .steps-row-4 {
     gap: 20px;
   }
 
@@ -1907,6 +1929,25 @@ footer {
 
   .checklist-container {
     grid-template-columns: 1fr;
+  }
+
+  /* Lead Gen Framework mobile adjustments */
+  .leadgen-framework-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .leadgen-framework-card {
+    padding: 28px;
+  }
+
+  /* Lead Gen Types mobile adjustments */
+  .leadgen-types-grid {
+    gap: 16px;
+  }
+
+  .leadgen-type-card {
+    padding: 32px;
   }
 }
 
@@ -2060,6 +2101,81 @@ footer {
   transform: translateY(-2px);
 }
 
+/* Light-themed platform pills for light sections */
+.platform-pill-light {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 100px;
+  padding: 18px 28px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--l-text);
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+}
+
+.platform-pill-light:hover {
+  border-color: var(--accent-1);
+  background: var(--glow-warm);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.platform-pill-small-light {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 100px;
+  padding: 12px 20px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--l-text-dim);
+  transition: border-color 0.3s, background 0.3s, color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+}
+
+.platform-pill-small-light:hover {
+  border-color: var(--accent-2);
+  background: var(--glow-cool);
+  color: var(--l-text);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   PRICING DARK VARIANT
+   Dark-themed pricing cards for dark sections
+============================================ */
+.pricing-grid-dark {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.pricing-grid-dark .pricing-card {
+  background: var(--d-surface);
+  border: 2px solid var(--d-border);
+  color: var(--d-text);
+}
+
+.pricing-grid-dark .pricing-card:hover {
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+.pricing-grid-dark .pricing-header h3 {
+  color: var(--d-text);
+}
+
+.pricing-grid-dark .pricing-desc {
+  color: var(--d-text-dim);
+}
+
+.pricing-grid-dark .pricing-feature {
+  color: var(--d-text);
+}
+
 /* ============================================
    PRICING BEST FOR
    "Best for" label in pricing cards
@@ -2113,4 +2229,113 @@ footer {
   color: var(--l-text);
   font-weight: 500;
   line-height: 1.5;
+}
+
+/* ============================================
+   LEAD GENERATION FRAMEWORK GRID
+   3-column grid for 6-step process (displays as 3x2)
+============================================ */
+.leadgen-framework-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.leadgen-framework-card {
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 20px;
+  padding: 32px;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s, border-color 0.4s;
+}
+
+.leadgen-framework-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-1);
+}
+
+.leadgen-framework-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+
+.leadgen-framework-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--l-text);
+  margin-bottom: 16px;
+}
+
+.leadgen-framework-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leadgen-framework-list li {
+  font-size: 0.9rem;
+  color: var(--l-text-dim);
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+
+.leadgen-framework-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-1);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+/* ============================================
+   LEAD GEN TYPES GRID
+   2x2 grid for 4 types of lead generation
+============================================ */
+.leadgen-types-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.leadgen-type-card {
+  background: var(--d-surface);
+  border: 1px solid var(--d-border);
+  border-radius: 20px;
+  padding: 40px;
+  transition: transform 0.4s var(--ease-out), border-color 0.4s;
+}
+
+.leadgen-type-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+.leadgen-type-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--d-text);
+  margin-bottom: 12px;
+}
+
+.leadgen-type-card p {
+  font-size: 0.95rem;
+  color: var(--d-text-dim);
+  line-height: 1.7;
+  margin: 0;
 }
