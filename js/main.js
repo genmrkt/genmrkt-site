@@ -32,6 +32,69 @@ window.addEventListener('scroll', () => {
 });
 
 // ============================================
+// MOBILE HAMBURGER MENU
+// Toggle mobile nav on button click, close on link click or outside tap
+// ============================================
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (navToggle && navLinks) {
+  // Toggle menu open/closed when hamburger is clicked
+  navToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navToggle.classList.toggle('active');
+    navLinks.classList.toggle('mobile-open');
+  });
+
+  // Close menu when any nav link is clicked (except the Services accordion toggle)
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      // Skip: the Services toggle handles its own click in mobile accordion mode
+      if (link.classList.contains('nav-dropdown-toggle') && navLinks.classList.contains('mobile-open')) {
+        return;
+      }
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('mobile-open');
+    });
+  });
+
+  // Close menu when clicking anywhere outside the nav
+  document.addEventListener('click', (e) => {
+    if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('mobile-open');
+      // Also collapse the services submenu when closing the whole menu
+      const dropdown = navLinks.querySelector('.nav-dropdown');
+      if (dropdown) dropdown.classList.remove('open');
+    }
+  });
+}
+
+// ============================================
+// MOBILE SERVICES ACCORDION
+// Expands/collapses the Services submenu inside the mobile hamburger menu
+// ============================================
+const serviceDropdown = document.querySelector('.nav-dropdown');
+const serviceToggle = serviceDropdown ? serviceDropdown.querySelector('.nav-dropdown-toggle') : null;
+
+if (serviceToggle && serviceDropdown) {
+  serviceToggle.addEventListener('click', (e) => {
+    // Only act as accordion when the mobile hamburger menu is open
+    if (navLinks && navLinks.classList.contains('mobile-open')) {
+      e.preventDefault();
+      serviceDropdown.classList.toggle('open');
+    }
+  });
+
+  // Close the submenu when a service link is tapped (main menu closes too via the link handler above)
+  serviceDropdown.querySelectorAll('.nav-dropdown-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      serviceDropdown.classList.remove('open');
+    });
+  });
+}
+
+// ============================================
 // SMOOTH SCROLLING
 // Enable smooth scroll for anchor links
 // ============================================

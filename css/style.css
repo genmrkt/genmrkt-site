@@ -246,6 +246,96 @@ a {
 }
 
 /* ============================================
+   SERVICES DROPDOWN
+   Desktop: hover dropdown | Mobile: accordion
+============================================ */
+
+/* Make the <li> the positioning anchor */
+.nav-dropdown {
+  position: relative;
+}
+
+/* Invisible bridge fills the gap between the link and the dropdown panel.
+   Without this, moving the mouse down through the gap would end the hover
+   state and close the dropdown before reaching it. */
+.nav-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -16px;
+  right: -16px;
+  height: 16px; /* must be >= the gap set on .nav-dropdown-menu top */
+}
+
+/* Flex-align the link text + chevron */
+.nav-dropdown-toggle {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Chevron rotates when dropdown is open */
+.nav-chevron {
+  transition: transform 0.25s var(--ease-out);
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.nav-dropdown:hover .nav-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* Dropdown panel — invisible until hovered */
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px); /* visual gap — covered by the ::after bridge above */
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: #1d1d32;
+  border: 1px solid #2a2a44;
+  border-radius: 16px;
+  padding: 8px;
+  min-width: 220px;
+  list-style: none;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  z-index: 1000;
+  /* Hidden by default, fades in on hover */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out), visibility 0.2s;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Individual dropdown links */
+.nav-dropdown-menu li {
+  list-style: none;
+}
+
+.nav-dropdown-menu a {
+  display: block !important;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--d-text-dim) !important;
+  border-radius: 10px;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-dropdown-menu a:hover {
+  color: var(--accent-1) !important;
+  background: rgba(255, 77, 77, 0.08);
+}
+
+/* ============================================
    HERO — DARK SECTION WITH MASSIVE TYPE
    Animated gradient orbs + grid lines
 ============================================ */
@@ -1789,6 +1879,128 @@ footer {
   .leadgen-types-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+}
+
+/* Mobile menu dropdown — shown when JS adds .mobile-open */
+.nav-links.mobile-open {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  position: fixed;
+  top: 64px; /* height of nav bar */
+  left: 0;
+  right: 0;
+  background: #141422;
+  border-bottom: 1px solid var(--d-border);
+  padding: 16px 24px 24px;
+  z-index: 999;
+  /* Slide-down animation */
+  animation: mobileMenuSlide 0.25s var(--ease-out) both;
+}
+
+.nav-links.mobile-open li {
+  width: 100%;
+}
+
+.nav-links.mobile-open a {
+  display: block;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--d-text);
+  border-bottom: 1px solid var(--d-border);
+}
+
+.nav-links.mobile-open li:last-child a {
+  border-bottom: none;
+  margin-top: 8px;
+}
+
+/* Make the CTA button full-width in mobile menu */
+.nav-links.mobile-open .nav-cta {
+  display: block;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 24px;
+}
+
+/* Services dropdown accordion in mobile menu */
+.nav-links.mobile-open .nav-dropdown-toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Disable desktop hover dropdown inside mobile menu */
+.nav-links.mobile-open .nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: none;
+}
+
+/* Reset dropdown to static/accordion inside mobile menu */
+.nav-links.mobile-open .nav-dropdown-menu {
+  position: static;
+  transform: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  min-width: 0;
+  border-radius: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease-out), opacity 0.25s var(--ease-out), visibility 0.25s;
+}
+
+/* Show accordion when .open class is added by JS */
+.nav-links.mobile-open .nav-dropdown.open .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  max-height: 300px;
+}
+
+.nav-links.mobile-open .nav-dropdown.open .nav-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* Style the sub-links inside mobile accordion */
+.nav-links.mobile-open .nav-dropdown-menu a {
+  padding: 10px 0 10px 20px;
+  font-size: 0.92rem;
+  border-radius: 0;
+  border-bottom: none;
+  color: var(--d-text-dim) !important;
+}
+
+.nav-links.mobile-open .nav-dropdown-menu a:hover {
+  color: var(--accent-1) !important;
+  background: transparent;
+}
+
+.nav-links.mobile-open .nav-dropdown-menu li:last-child a {
+  border-bottom: none;
+  margin-top: 0;
+}
+
+@keyframes mobileMenuSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
