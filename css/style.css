@@ -2232,6 +2232,107 @@ footer {
 }
 
 /* ============================================
+   LEGAL PAGES
+   Privacy Policy & Terms of Service content
+============================================ */
+.legal-content {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.legal-intro {
+  font-size: 1.1rem;
+  color: var(--l-text-dim);
+  line-height: 1.8;
+  margin-bottom: 56px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--l-border);
+}
+
+.legal-section {
+  margin-bottom: 48px;
+}
+
+.legal-section h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--l-text);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--l-border);
+}
+
+.legal-section p {
+  font-size: 0.97rem;
+  color: var(--l-text-dim);
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.legal-section ul li {
+  font-size: 0.97rem;
+  color: var(--l-text-dim);
+  line-height: 1.7;
+  padding-left: 22px;
+  position: relative;
+}
+
+.legal-section ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-1);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.legal-section a {
+  color: var(--accent-1);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.3s;
+}
+
+.legal-section a:hover {
+  text-decoration-color: var(--accent-1);
+}
+
+.legal-section strong {
+  color: var(--l-text);
+  font-weight: 700;
+}
+
+.legal-contact {
+  margin-top: 20px;
+  padding: 24px 32px;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legal-contact p {
+  margin: 0;
+}
+
+/* ============================================
    LEAD GENERATION FRAMEWORK GRID
    3-column grid for 6-step process (displays as 3x2)
 ============================================ */
