@@ -129,31 +129,29 @@ Each section follows this structure:
 genmrkt-site/
 ├── CLAUDE.md
 ├── index.html
-├── about.html
 ├── contact.html
+├── success.html
 ├── css/
 │   └── style.css
 ├── js/
-│   ├── main.js
-│   └── course-player.js
+│   └── main.js
 ├── services/
 │   ├── website-design.html
 │   ├── instructional-design.html
-│   ├── social-media.html
+│   ├── marketing-automation.html
 │   └── lead-generation.html
-├── blog/
-│   ├── index.html
-│   └── posts/
+├── courses/
+│   └── course-demo.html
 ├── legal/
 │   ├── privacy.html
 │   └── terms.html
 ├── images/
-│   ├── logo.svg
-│   ├── clients/
+│   ├── favicon.svg
+│   ├── portfolio/
+│   ├── og/
 │   └── blog/
-├── courses/
-│   └── demo-course.html
-└── favicon.ico
+└── blog/
+    └── index.html
 ```
 
 ## Coding Rules
@@ -171,3 +169,13 @@ genmrkt-site/
 12. Stagger grid items with `.reveal-delay-1` through `.reveal-delay-4`
 13. Keep file sizes small — compress images, minimize inline styles
 14. All links must point somewhere real — never use `#` as a placeholder href
+
+### Image Guidelines
+- Use WebP format for all images — convert from PNG/JPG using Squoosh or similar
+- Store all images in `/images/` with descriptive lowercase hyphenated filenames
+- Resize to 2x display size maximum (e.g. 1100px wide for a 550px display container)
+- Target under 100KB per image where possible
+- Add `loading="lazy"` to any image below the fold
+- Always include descriptive alt text on every image
+- Portfolio screenshots go in `/images/portfolio/`
+- OG/share images go in `/images/` with `og-` prefix, sized 1200x630px
