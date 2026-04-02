@@ -9,7 +9,7 @@ The owner is a coding beginner — keep code clean, well-commented, and simple.
 - **Company:** Generate Marketing (GENMRKT)
 - **Tagline:** We generate growth for ambitious brands.
 - **Tone:** Bold, edgy, clean, minimal. Creative agency energy — confident but not cluttered.
-- **Services:** Lead Generation, Website Design, Marketing Automation, Instructional Design
+- **Services:** Lead Generation, Website Design, Marketing Automation, Instructional Design, AI Integrations & Agents
 - **Contact:** (917) 443-9516 | info@genmrkt.com | genmrkt.com
 
 ## Design System
@@ -139,7 +139,8 @@ genmrkt-site/
 │   ├── website-design.html
 │   ├── instructional-design.html
 │   ├── marketing-automation.html
-│   └── lead-generation.html
+│   ├── lead-generation.html
+│   └── ai-integrations.html
 ├── courses/
 │   └── course-demo.html
 ├── legal/
